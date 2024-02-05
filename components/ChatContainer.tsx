@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FlatList, View, StyleSheet } from "react-native";
-import Message from "./Message"; // Import your Message component
+import Message from "./Message";
 
 const ChatContainer= ({ messages }:any) => {
   return (

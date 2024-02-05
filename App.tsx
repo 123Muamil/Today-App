@@ -10,6 +10,8 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 import app from "./config/firebaseConfig";
 import { getFirestore,collection, getDocs } from 'firebase/firestore';
+import Login from "./auth/Login";
+import Signup from "./auth/Signup";
 const db = getFirestore(app);
 const App:React.FC = () => {
   useEffect(() => {
@@ -26,10 +28,10 @@ const App:React.FC = () => {
   }, []);
   return (
     <NavigationContainer>
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Tab"
-        options={{ headerShown: false, animationEnabled: false }}
+        options={{ headerShown: false,}}
       >
         {() => (
           <Tab.Navigator
@@ -76,6 +78,8 @@ const App:React.FC = () => {
 
     
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
+      <Stack.Screen name="Login" component={Login}/>
+      <Stack.Screen name="Signup" component={Signup}/>
     </Stack.Navigator>
     </NavigationContainer>
 
