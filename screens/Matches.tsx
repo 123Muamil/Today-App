@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import {
   ScrollView,
   View,
@@ -10,9 +10,13 @@ import {
 import { CardItem, Icon } from "../components";
 import DEMO from "../assets/data/demo";
 import styles, { DARK_GRAY } from "../assets/styles";
+import { DataT } from "../types";
 
-const Matches = () => (
-  <ImageBackground
+
+const Matches = () => {
+  return (
+    <View style={{flex:1}}>
+ <ImageBackground
     source={require("../assets/images/bg.png")}
     style={styles.bg}
   >
@@ -41,6 +45,10 @@ const Matches = () => (
       />
     </View>
   </ImageBackground>
-);
+    </View>
+  )
+}
 
-export default Matches;
+export default Matches
+
+

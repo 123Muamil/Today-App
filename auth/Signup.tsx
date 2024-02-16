@@ -1,30 +1,50 @@
-// Import necessary dependencies
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image ,Dimensions} from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import uuid from 'react-native-uuid';
+import { getDatabase, ref, set } from "firebase/database";
+import app from '../config/firebaseConfig';
+import Toast from 'react-native-simple-toast';
 const Signup = ({ navigation }:any) => {
     const auth = getAuth();
+    const database=getDatabase(app)
+    const userId = uuid.v4();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name,setName]=useState('');
+   
     const handleSignup =async () => {
+       
        await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          // Signed up 
           const user = userCredential.user;
-          console.log("Signup Successfully")
+          setName('')
+          setEmail('')
+          setPassword('')
           if(user)
           {
-                navigation.navigate('Login')
+            const data={
+                uid:user.uid,
+                email: user.email,
+                displayName: name, 
+            }
+            set(ref(database, `users/${user.uid}`), data)
+          .then(() => {
+            Toast.show('Registered Successfully',2000);
+            navigation.navigate('Login')
+          })
+          .catch((error) => {
+            console.error('Error storing user data:', error.message);
+          });
           }
-        //   console.warn("Signup Successfully")
-          // ...
+      
         })
         .catch((error:any) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log("The error is:",errorCode)
+          console.log(errorMessage)
+          Toast.show('Error While Registration',2000);
           // ..
         });
     };

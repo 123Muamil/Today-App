@@ -2,30 +2,53 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image ,Dimensions,ImageBackground} from 'react-native';
 const windowWidth = Dimensions.get('window').width;
-import {getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import app from '../config/firebaseConfig';
+import Toast from 'react-native-simple-toast';
+import { UseDispatch, useDispatch } from 'react-redux';
+import { setUser } from '../redux/reducer/user';
+import Auth from '../service/Auth';
 const Login = ({ navigation }:any) => {
-    const auth = getAuth();
+    // Initialize Firebase Realtime Database
+const db = getDatabase(app);
+// Initialize Firebase Authentication
+const auth = getAuth(app);
+const dispatch=useDispatch()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const handleLogin =async () => {
-       await signInWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            if(user)
-            {
-                 console.warn("Login Successfully")
-                 navigation.navigate('Tab')
-            }
-            // ...
-          })
-          .catch((error:any) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.warn("Error while login",errorCode)
-          });
-    };
-
+ 
+    
+  // Function for handling login
+ const handleLogin =async () => {
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // User successfully logged in
+        const user = userCredential.user;
+        console.log('User logged in:', user.uid);
+      
+        // Fetch user data from the database
+        fetchUserData(user.uid);
+      
+      })
+      .catch((error) => {
+        // An error occurred during login
+        console.error('Error logging in:', error.message);
+      });
+  };
+  
+  // Function to fetch user data from the database
+  const fetchUserData = async (userId:string) => {
+    const userRef = await ref(db, 'users/' + userId);
+    onValue(userRef, (snapshot) => {
+      const userData = snapshot.val();
+      console.log('User data:', userData);
+       dispatch(setUser(userData))
+        Auth.setAccount(userData)
+        Toast.show('User Logged In Successfully',2000);
+        navigation.navigate('Tab')
+    });
+  };
     return (
         <View style={styles.container}>
               <Image style={styles.image} source={require('../assets/images/auth.jpg')}/>
