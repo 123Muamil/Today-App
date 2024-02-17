@@ -16,7 +16,9 @@ export const DISLIKE_ACTIONS = "#363636";
 export const FLASH_ACTIONS = "#5028D7";
 
 export const DIMENSION_WIDTH = Dimensions.get("window").width;
-export const DIMENSION_HEIGHT = Dimensions.get("window").height;
+export const DIMENSION_HEIGHT=Dimensions.get("window").height;
+ const {height} = Dimensions.get("window");
+export const DIMENSION_HEIGHT1=height*0.7;
 
 export default StyleSheet.create({
   // COMPONENT - CARD ITEM
@@ -148,17 +150,14 @@ export default StyleSheet.create({
     width: DIMENSION_WIDTH - 100,
   },
   avatar: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
+    borderRadius: 20,
+    width: 72,
+    height: 72,
     marginRight: 20,
-    marginVertical: 15,
+    marginVertical: 10,
+   flexShrink:0,
   },
-  message: {
-    color: GRAY,
-    fontSize: 12,
-    paddingTop: 5,
-  },
+
 
   // COMPONENT - PROFILE ITEM
   containerProfileItem: {
@@ -233,21 +232,135 @@ export default StyleSheet.create({
 
   // CONTAINER - HOME
   containerHome: {
-    marginHorizontal: 10,
+ 
+    backgroundColor:'#010510',
+    width:DIMENSION_WIDTH,
+    height:DIMENSION_HEIGHT
   },
-
+  explorerText: {
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 24, 
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    flexShrink: 0,
+    borderRadius: 20,
+    backgroundColor: 'rgba(63, 80, 124, 0.16)',
+     justifyContent:'center',
+     alignItems:'center'
+  },
+  explorerImage:{
+    marginTop:10,
+    height: DIMENSION_HEIGHT1,
+    borderRadius:40,
+  },
+  explorerInnerContainer: {
+    width: 337,
+    height: 120,
+    gap: 8,
+    borderRadius: 30,
+    backgroundColor: 'rgba(63, 80, 124, 0.40)',
+    position:'absolute',
+    bottom:0,
+    marginBottom:10,
+    marginHorizontal:10,
+  },
+  matchContainer:{
+   flexDirection:'row',
+   justifyContent:'space-between',
+   marginHorizontal:20,
+   marginTop:10,
+  },
+  NameStyle: {
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 24, 
+   
+  },
+  matchText: {
+    color: '#000',
+    fontFamily: '',
+    fontSize: 10,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 10,
+    letterSpacing: 0.2,
+    textTransform: 'uppercase',
+  },
+  MATCHContainer: {
+    display: 'flex',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    justifyContent:'flex-end',
+    alignItems: 'flex-end',
+    gap: 4,
+    borderRadius: 40,
+    backgroundColor: '#FFF',
+  },
+  line: {
+    height: 1,
+    alignSelf: 'stretch',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.10)',
+  },
+  Container:{
+  flexDirection:'row',
+  justifyContent:'space-between',
+  marginHorizontal:30,
+  },
+  Row:{
+flexDirection:'row'
+  },
+  justifyRow:{
+    flexDirection:'row',marginLeft:10,
+  },
+  crossContainer: {
+    padding: 16,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(63, 80, 124, 0.40)',
+    position:'absolute',
+    right:0,
+    bottom:140,
+  },
+  heartContainer:{
+    padding: 16,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(63, 80, 124, 0.40)',
+    position:'absolute',
+    right:0,
+    bottom:200,
+  },
   // CONTAINER - MATCHES
   containerMatches: {
     justifyContent: "space-between",
     flex: 1,
     paddingHorizontal: 10,
   },
-
+  flexContainer1:{
+    flexDirection:'row',gap:50,marginTop:10
+  },
+  flexContainer2:{
+    flexDirection:'row',gap:45,marginTop:10,
+  },
   // CONTAINER - MESSAGES
   containerMessages: {
-    justifyContent: "space-between",
-    flex: 1,
-    paddingHorizontal: 10,
+    backgroundColor:'#010510',
+    width:DIMENSION_WIDTH,
+    height:DIMENSION_HEIGHT
   },
 
   // CONTAINER - PROFILE
@@ -255,12 +368,108 @@ export default StyleSheet.create({
   photo: {
     width: DIMENSION_WIDTH,
     height: 450,
+    // opacity: 0.3,
+    
   },
   topIconLeft: {
-    paddingLeft: 20,
+    paddingLeft: 5,
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 20,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    lineHeight: 24, 
+  },
+  circle: {
+    width: 48,
+    height: 48,
+    flexShrink: 0, 
+    borderRadius: 20,
+    backgroundColor: 'rgba(63, 80, 124, 0.16)',
+    justifyContent:'center',
+    alignItems:'center',
+    textAlign:'center',
+    flexDirection:'row'
+  },
+  profile: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center', 
+    marginTop:50,
+  },
+  gradient: {
+    flex: 1,
+   
+   
+  },
+  likeContainer: {
+    display: 'flex',
+    width: 100,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  topText: {
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 20 * 1.5, 
+  },
+  bottomText: {
+    color: '#D0D9F9',
+    fontFamily: '',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: '400',
+    lineHeight: 14 * 1.5,
+  },
+  text: {
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 16,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 16 * 1.5,
+    marginRight:10
+  },
+  aboutContainer: {
+    width: DIMENSION_WIDTH,
+    height: 118,
+    flexShrink: 0,
+    borderRadius: 30,
+    backgroundColor: 'rgba(63, 80, 124, 0.40)',
+   marginTop:20,
+  },
+  icon: {
+    color: '#D0D9F9',
+    fontFamily: '',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: '400',
+    lineHeight: 14 * 1.5, 
+  },
+  iconImage:{
+    width:16,
+    height:16,
+    marginTop:2,
+    marginRight:5,
+  },
+  about: {
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 16,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 16 * 1.5,
+    marginLeft:10,
+    marginTop:10,
   },
   topIconRight: {
-    paddingRight: 20,
+   
   },
   actionsProfile: {
     justifyContent: "center",
@@ -299,4 +508,5 @@ export default StyleSheet.create({
   iconMenu: {
     alignItems: "center",
   },
+  
 });
