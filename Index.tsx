@@ -107,7 +107,7 @@ theme.colors.secondaryContainer = "transperent"
         </Stack.Screen>
   
       
-        <Stack.Screen name="ChatScreen" component={ChatScreen}  />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false,}} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false,}}/>
         <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false,}}/>
       </Stack.Navigator>

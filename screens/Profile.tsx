@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ScrollView,
   View,
   Image,
   Text,
@@ -9,7 +8,7 @@ import {
   SafeAreaView,
   Dimensions
 } from "react-native";
-import { Icon, ProfileItem } from "../components";
+import { Icon} from "../components";
 import { EvilIcons } from '@expo/vector-icons';
 import DEMO from "../assets/data/demo";
 import styles, { WHITE } from "../assets/styles";

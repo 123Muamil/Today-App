@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform,TouchableWithoutFeedback, Modal, Pressable } from "react-native";
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform,PanResponder, Animated,Dimensions,Image} from "react-native";
 import { Icon } from "../components";
 import styles, { DARK_GRAY } from "../assets/styles";
 import ChatContainer from "../components/ChatContainer";
@@ -11,9 +11,13 @@ import * as ImagePicker from 'expo-image-picker';
 import app from '../config/firebaseConfig';
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
 import { getStorage, ref as ref1,uploadBytes,getDownloadURL } from "firebase/storage";
 import { Audio } from 'expo-av';
-// import Modal from "react-native-modal";
+const {height}=Dimensions.get('window')
+const chatHeight=height*0.15;
+const windowWidth = Dimensions.get('window').width;
 type RootStackParamList = {
   ChatScreen: {
     match: {
@@ -36,18 +40,12 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [recording, setRecording] = useState() as any;
   const [permissionResponse, requestPermission] = Audio.usePermissions() as any;
-  const [isRecording, setIsRecording] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [recordings, setRecordings] = useState([]) as any;
-  const [recordingFile, setRecordingFile] = useState() as any;
-
-  // console.log("The image is:",image)
+  const pan = useRef(new Animated.ValueXY()).current;
   const match = route.params?.match;
   const database = getDatabase(app);
   const storage= getStorage(app)
   const currentUserId = userData.uid;
   const guestUserId = match.uid;
-
   useEffect(() => {
     const messageRef = ref(database, `messages/${currentUserId}/${guestUserId}`);
     const unsubscribe = onValue(messageRef, (snapshot) => {
@@ -56,13 +54,51 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
         ...message,
       }));
       setAllMessages(messages);
+      console.log("The messages are:",messages)
     });
 
     return () => {
       unsubscribe();
     };
   }, [currentUserId, guestUserId]);
-
+  
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => {
+        startRecording(); 
+        return true;
+        
+      },
+      onPanResponderGrant: () => {
+      startRecording();
+    },
+      onPanResponderMove: (_, gestureState) => {
+        Animated.event(
+          [
+            null,
+            { dx: pan.x, dy: pan.y }
+          ],
+          { useNativeDriver: false }
+        )(_, gestureState);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        // Snap back to the original position
+        Animated.spring(pan, {
+          toValue: { x: 0, y: 0 },
+          useNativeDriver: false
+        }).start(() => {
+          // Check if the view has returned to its original position
+          if (gestureState.dx === 0 && gestureState.dy === 0) {
+            // If it's at the original position, stop recording
+            stopRecording();
+          } else {
+            // If it's not at the original position, consider it a cancellation
+            console.log('Recording canceled');
+          }
+        });
+      }
+    })
+  ).current;
   const sendMessage1 = async () => {
     if (message === '') {
       console.warn('Please enter text');
@@ -177,6 +213,7 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
   };
 
     async function startRecording() {
+      console.log("Recording Started")
       try {
         if (permissionResponse.status !== 'granted') {
           console.log('Requesting permission..');
@@ -244,40 +281,63 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -100}
     >
-      <View style={{ flex: 1 }}>
+      <View style={chatStyles.container}>
         <View style={chatStyles.header}>
-          <Text style={chatStyles.title}>{match.displayName}</Text>
-          <TouchableOpacity>
-            <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
+           <View style={chatStyles.headerContent}>
+           <TouchableOpacity style={styles.circle}>
+        <AntDesign name="arrowleft" color={'#FFFFFF'} size={20} />
+          </TouchableOpacity>
+          <Image source={require('../assets/images/chatProfile.png')} style={chatStyles.chatImage}/>
+            <View>
+            <Text style={chatStyles.title}>{match.displayName}</Text>
+          <Text style={chatStyles.lastScene}>Last Seen at 10:00 AM</Text>
+            </View>
+           </View>
+          <TouchableOpacity style={styles.circle}>
+            <Icon name="ellipsis-vertical" color={'#FFFFFF'} size={20} />
           </TouchableOpacity>
         </View>
 
         <ChatContainer messages={allMessages} />
 
         <View style={chatStyles.inputContainer}>
-          <TouchableOpacity style={chatStyles.cameraButton} onPress={handleImageUpload}>
-            <Icon name="camera" color={DARK_GRAY} size={20} />
-          </TouchableOpacity>
-          <TextInput
-            style={chatStyles.input}
-            placeholder="Type a message..."
-            value={message}
-            onChangeText={handleTyping}
-            onSubmitEditing={sendMessage1}
-          />
-         {/* <TouchableOpacity style={chatStyles.sendButton} onPress={isTyping ? sendMessage1 : handleVoiceMessage} >
-            {isTyping ? (
-              <Ionicons name="send"  style={{color:'#FFF'}} size={20} />
-            ) : (
-              <FontAwesome name="microphone" style={{color:'#FFF'}} size={20} />
-            )}
-          </TouchableOpacity> */}
+        <View style={chatStyles.input}>
+  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <TouchableOpacity onPress={handleImageUpload}>
+    <SimpleLineIcons name="camera" size={20} color="#FFFFFF" />
+    </TouchableOpacity>
+    <TextInput
+      style={{ flex: 1, marginLeft: 8, color: '#FFF' }}
+      placeholder="Type Something..."
+      value={message}
+      onChangeText={handleTyping}
+      onSubmitEditing={sendMessage1}
+      placeholderTextColor='#757A8D'
+    />
+  </View>
+</View>
+
           {
               isTyping?<TouchableOpacity style={chatStyles.sendButton} onPress={sendMessage1}>
  <Ionicons name="send"  style={{color:'#FFF'}} size={20} />
-              </TouchableOpacity>:<TouchableOpacity style={chatStyles.sendButton} onPressIn={startRecording} onPressOut={stopRecording}>
-              <FontAwesome name="microphone" style={{color:'#FFF'}} size={20} />
-              </TouchableOpacity>
+              </TouchableOpacity>:   <Animated.View
+        style={{
+          display: 'flex',
+          padding:20,
+         flexDirection: 'column',
+         justifyContent: 'center',
+         alignItems: 'flex-start',
+         gap: 8,
+         borderRadius: 50,
+         backgroundColor: '#474DEF',
+         marginBottom:40,
+         marginLeft:5,
+          transform: [{ translateX: pan.x }, { translateY: pan.y }]
+        }}
+        {...panResponder.panHandlers}
+      >
+      <FontAwesome name="microphone" style={{color:'#FFF'}} size={20} />
+      </Animated.View>
           }
         </View>
       </View>
@@ -287,45 +347,81 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
 };
 
 const chatStyles = StyleSheet.create({
+  container:{
+   flex:1,
+   backgroundColor: "#0D152B",
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 10,
-    backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#2D335E",
+    height:chatHeight,
+    width:windowWidth,
+    overflow:'hidden',
+    marginTop:10,
+
+  },
+  headerContent:{
+     flexDirection:'row',
+     gap:20,
+  },
+  chatImage:{
+   width:48,
+   height:48,
+   flexShrink:0,
+   borderRadius:48,
+   marginTop:4,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 16,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    marginTop:2,
+  },
+  lastScene: {
+    color: '#D0D9F9',
+    fontFamily: 'Geometria',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '400',
+
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
-    padding: 10,
+
   },
   input: {
-    flex: 1,
-    marginRight: 10,
-    borderRightWidth:1,
-    borderTopWidth:1,
-    borderBottomWidth:1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 5,
-    marginLeft:-7,
+    display: 'flex',
+    width: 301,
+    padding: 16,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderRadius: 48,
+    borderWidth: 1,
+    borderColor: '#283455',
+    backgroundColor: '#0D152B',
+     marginBottom:40,
+   
   },
-  sendButton:{
-    width:50,
-    height:50,
-    backgroundColor:'#24CC63',
-    borderRadius:50,
-    justifyContent:'center',
-    alignItems:'center'
+  sendButton: {
+    display: 'flex',
+     padding:20,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderRadius: 50,
+    backgroundColor: '#474DEF',
+    marginBottom:40,
+    marginLeft:5,
+    
   },
   cameraButton:{
     width:40,
@@ -340,115 +436,6 @@ const chatStyles = StyleSheet.create({
     borderBottomWidth:1,
     
   },
-  enteredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  modal: {
-    justifyContent: 'flex-end',
-    margin: 0,
-  },
-  modalContent: {
-    width: '100%',
-    height: 214,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    backgroundColor: 'green',
-    position: 'absolute',
-    bottom: 0, // Position the modal at the bottom of the screen
-    left: 0,
-    right: 0,
-    overflow:'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-  
-  },
-  logoutText: {
-    color: '#000',
-    fontFamily: 'PT Sans', 
-    fontSize: 24,
-    fontStyle: 'normal',
-    fontWeight: '700',
-  },
-  horizontalLine: {
-    width: 370,
-    height: 1,
-    backgroundColor: 'rgba(152, 152, 152, 0.27)',
-    marginTop:10,
-  },
-  Text: {
-    color: 'rgba(0, 0, 0, 0.88)',
-    fontFamily: 'PT Sans',
-    fontSize: 18,
-    fontStyle: 'normal',
-    fontWeight: '400',
-  },
-  buttonCotainer1:{
-    display:'flex',
-    flexDirection:'row',
-    marginTop:30,
-  }
-  ,
-  button1: {
-    width: 160,
-    height: 40,
-    flex: 0,
-    borderRadius: 10,
-    backgroundColor: '#F3F3F3',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight:20,
-  },
-  buttonText: {
-    color: '#A1A1A1',
-   
- 
-  },
-  buttonText1:{
-    color:'#F00',
-    textAlign: 'center',
-    fontFamily: 'PT Sans',
-    fontSize: 16,
-    fontStyle: 'normal',
-    fontWeight: '700',
-  }
 });
 
 export default ChatScreen;

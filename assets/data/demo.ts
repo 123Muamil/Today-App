@@ -1,8 +1,8 @@
 import { DataT } from "../../types";
-import IMAGE_01 from "../images/01.jpg";
-import IMAGE_02 from "../images/02.jpg";
-import IMAGE_03 from "../images/03.jpg";
-import IMAGE_04 from "../images/04.jpg";
+import IMAGE_01 from "../images/match1.jpg";
+import IMAGE_02 from "../images/match2.jpg";
+import IMAGE_03 from "../images/match3.jpg";
+import IMAGE_04 from "../images/match4.jpg";
 import IMAGE_05 from "../images/05.jpg";
 import IMAGE_06 from "../images/06.jpg";
 import IMAGE_07 from "../images/07.jpg";
@@ -21,6 +21,7 @@ const data: DataT[] = [
     message:
       "I will go back to Gotham and I will fight men Iike this but I will not become an executioner.",
     image: IMAGE_01,
+    displayName:''
   },
   {
     id: 2,
@@ -31,6 +32,7 @@ const data: DataT[] = [
     isOnline: false,
     message: "Someone like you. Someone who'll rattle the cages.",
     image: IMAGE_02,
+    displayName:''
   },
   {
     id: 3,
@@ -42,6 +44,7 @@ const data: DataT[] = [
     message:
       "Oh, hee-hee, aha. Ha, ooh, hee, ha-ha, ha-ha. And I thought my jokes were bad.",
     image: IMAGE_03,
+    displayName:''
   },
   {
     id: 4,
@@ -52,6 +55,7 @@ const data: DataT[] = [
     isOnline: true,
     message: "Bats frighten me. It's time my enemies shared my dread.",
     image: IMAGE_04,
+    displayName:''
   },
   {
     id: 5,
@@ -62,6 +66,7 @@ const data: DataT[] = [
     isOnline: false,
     message: "It's not who I am underneath but what I do that defines me.",
     image: IMAGE_05,
+    displayName:''
   },
   {
     id: 6,
@@ -73,6 +78,7 @@ const data: DataT[] = [
     message:
       "You have nothing, nothing to threaten me with. Nothing to do with all your strength.",
     image: IMAGE_06,
+    displayName:''
   },
   {
     id: 7,
@@ -84,6 +90,7 @@ const data: DataT[] = [
     message:
       "Never start with the head. The victim gets all fuzzy. He can't feel the next... See?",
     image: IMAGE_07,
+    displayName:''
   },
   {
     id: 8,
@@ -101,6 +108,7 @@ const data: DataT[] = [
     message:
       "And as for the television's so-called plan, Batman has no jurisdiction.",
     image: IMAGE_08,
+    displayName:''
   },
   {
     id: 9,
@@ -112,6 +120,7 @@ const data: DataT[] = [
     message:
       "This is what happens when an unstoppable force meets an immovable object.",
     image: IMAGE_09,
+    displayName:''
   },
   {
     id: 10,
@@ -123,6 +132,7 @@ const data: DataT[] = [
     message:
       "You want order in Gotham. Batman must take off his mask and turn himself in.",
     image: IMAGE_10,
+    displayName:''
   },
 ];
 

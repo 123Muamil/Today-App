@@ -1,54 +1,52 @@
-// ChatContainer.js
-
 import React from "react";
-import { FlatList, View, StyleSheet,Dimensions ,Text,Image} from "react-native";
+import { FlatList, View, StyleSheet, Text, Image, Dimensions } from "react-native";
 import { useSelector } from "react-redux";
 import { Video, ResizeMode } from 'expo-av';
 import AudioSlider from "../audio/AudioSlider";
-const ChatContainer= ({ messages }:any) => {
-  // console.log("The message are in:",messages)
+const screenWidth=Dimensions.get('window');
+const ChatContainer = ({ messages }: any) => {
   const { userData } = useSelector((state: any) => state.User);
   const currentUserId = userData.uid;
   const video = React.useRef(null) as any;
   const [status, setStatus] = React.useState({}) as any;
-  const renderItem = ({ item}:any) => {
-    const isCurrentUser = item.message.sender ===  currentUserId; // Update with current user's ID
+
+  const renderItem = ({ item }: any) => {
+    const isCurrentUser = item.message.sender === currentUserId;
     const messageAlignment = isCurrentUser ? 'flex-end' : 'flex-start';
-    const backgroundColor = isCurrentUser ? '#DCF8C6' : '#FFFFFF';
-    const textColor = isCurrentUser ? '#000000' : '#000000';
-   
+    const backgroundColor = isCurrentUser ? '#1B1E43' : '#1B1E43';
+    
     return (
-      <View style={styles.messageContainer}>
+      <View style={[styles.messageContainer, { alignSelf: messageAlignment }]}>
         <View style={[styles.messageBubble, { backgroundColor }]}>
-        {item.message.msg !== '' && (
-            <Text style={{ color: textColor }}>{item.message.msg}</Text>
+          {item.message.msg !== '' && (
+            <Text style={styles.message}>{item.message.msg}</Text>
           )}
           {item.message.image !== '' && (
-           <View>
-           <Image source={{ uri: item.message.image }} style={{width:'100%',height:200,objectFit:'cover',borderRadius:10}} />
-           <Text style={{ fontSize: 12,position:'absolute',bottom:5,right:5 }}>{item.time}</Text>
-       </View>
+            <View style={styles.imageContainer}>
+              <Image source={{uri:item.message.image}} style={styles.image} />
+            </View>
           )}
           {item.message.video !== '' && (
-               <Video
-               ref={video}
-               style={{width:'100%',height:200,borderRadius:10}}
-               source={{uri:item.message.video}}
-               useNativeControls
-               resizeMode={ResizeMode.COVER}
-               isLooping
-               onPlaybackStatusUpdate={setStatus}
-             />
+            <Video
+              ref={video}
+              source={{ uri: item.message.video }}
+              useNativeControls
+              resizeMode={ResizeMode.COVER}
+              isLooping
+              onPlaybackStatusUpdate={setStatus}
+              style={styles.video}
+            />
           )}
-           {item.message.audio !== '' && (
-           <View style={{flex:1,justifyContent:'center',marginTop:15,}}>
-        <AudioSlider audio={item.message.audio}/>
-    </View>
+          {item.message.audio !== '' && (
+            <View style={styles.audioContainer}>
+              <AudioSlider audio={item.message.audio} />
+            </View>
           )}
         </View>
       </View>
     );
   };
+
   return (
     <FlatList
       data={messages}
@@ -61,34 +59,51 @@ const ChatContainer= ({ messages }:any) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10, // Adjust as needed
+    paddingVertical: 10,
+    paddingHorizontal: 10,
   },
   messageContainer: {
     marginVertical: 5,
-    flex:1,
-    marginHorizontal:10,
-    
+    maxWidth: '80%',
+    flexDirection: 'row',
   },
   messageBubble: {
-    borderRadius: 10,
     padding: 10,
-    maxWidth: '100%', // Adjust the maximum width as needed
+    borderRadius: 48,
+    borderWidth: 1,
+    borderColor: '#2A2F5C',
+    maxWidth: '80%',
   },
-  container1: {
-    flex: 1,
-    justifyContent: 'center',
+  message: {
+    color: '#FFF',
+    fontFamily: 'Geometria',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  imageContainer: {
+    width: '100%',
     alignItems: 'center',
-    backgroundColor: '#000', // Set background color to black
+    marginBottom: 5,
+  
   },
-  videoContainer: {
-    width: Dimensions.get('window').width / 2 + 10,
-    height: 150,
-    borderRadius: 30,
-    overflow: 'hidden',
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 28,
+    objectFit:'cover',
   },
   video: {
-    width: '100%',
-    height: '100%', // Set video height as needed
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    marginTop: 5,
+  },
+  audioContainer: {
+   
+   
+    
+    width: 250,
+  
   },
 });
 

@@ -1,30 +1,25 @@
-import React,{useState} from "react";
+import React from "react";
 import {
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
-  ImageBackground,
   FlatList,
+  SafeAreaView
 } from "react-native";
 import { CardItem, Icon } from "../components";
 import DEMO from "../assets/data/demo";
-import styles, { DARK_GRAY } from "../assets/styles";
-import { DataT } from "../types";
+import styles from "../assets/styles";
+
 
 
 const Matches = () => {
   return (
-    <View style={{flex:1}}>
- <ImageBackground
-    source={require("../assets/images/bg.png")}
-    style={styles.bg}
-  >
+    <SafeAreaView style={{flex:1}}>
     <View style={styles.containerMatches}>
       <View style={styles.top}>
         <Text style={styles.title}>Matches</Text>
-        <TouchableOpacity>
-          <Icon name="ellipsis-vertical" color={DARK_GRAY} size={20} />
+        <TouchableOpacity style={styles.circle}>
+          <Icon name="ellipsis-vertical" color={'#FFFFFF'} size={20} />
         </TouchableOpacity>
       </View>
 
@@ -32,20 +27,22 @@ const Matches = () => {
         numColumns={2}
         data={DEMO}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity>
+        renderItem={({ item,index }) => (
+         
+          <TouchableOpacity >
             <CardItem
               image={item.image}
               name={item.name}
               isOnline={item.isOnline}
               hasVariant
+              index={index}
             />
           </TouchableOpacity>
         )}
       />
     </View>
-  </ImageBackground>
-    </View>
+
+    </SafeAreaView>
   )
 }
 

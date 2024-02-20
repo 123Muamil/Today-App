@@ -23,6 +23,7 @@ const Login = ({ navigation }:any) => {
     const [password, setPassword] = useState('');
  
     const handleLogin = async () => {
+      
         await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;

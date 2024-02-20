@@ -25,15 +25,10 @@ export default class AudioSlider extends PureComponent {
             duration: 0,
             trackLayout: {},
             dotOffset: new Animated.ValueXY(),
-            xDotOffsetAtAnimationStart: 0
+            xDotOffsetAtAnimationStart: 0,
+            isRecording: false
         }
 
-        // Important: 
-        // this.state.dotOffset.x is the actual offset
-        // this.state.dotOffset.x._value is the offset from the point where the animation started
-        // However, since this.state.dotOffset.x is an object and not a value, it is difficult 
-        // to compare it with other numbers. Therefore, the const currentOffsetX is used.
-        // To print all attributes of the object see https://stackoverflow.com/questions/9209747/printing-all-the-hidden-properties-of-an-object
         this._panResponder = PanResponder.create({
             onMoveShouldSetResponderCapture: () => true,
             onMoveShouldSetPanResponderCapture: () => true,
@@ -148,6 +143,7 @@ export default class AudioSlider extends PureComponent {
     }
 
     render() {
+      const { isRecording } = this.state;
         return (
             <View
                 style={{
@@ -155,7 +151,7 @@ export default class AudioSlider extends PureComponent {
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
                     alignItems: 'stretch',
-                    paddingLeft: 8,
+                  
                     paddingRight: 8,
                 }}
             >
@@ -164,44 +160,42 @@ export default class AudioSlider extends PureComponent {
                     style={{
                         flex: 0,
                         flexDirection: 'row',
-                        justifyContent: 'space-between',
+                         gap:20,
                         alignItems: 'center',
-                        paddingLeft: 8,
-                        paddingRight: 8,
                         height: 35
                     }}
                 >
 
                     <TouchableOpacity
-                        style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            paddingRight: THUMB_SIZE,
-                            zIndex: 2
-                        }}
-                        onPress={this.onPressPlayPause}
-                    >
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              paddingRight:0,
+                             
+                              zIndex: 2,
+                              width:30,
+                          }}
+                        onPress={this.onPressPlayPause}>
                         {
                             this.state.playing
                                 ?
-                                <MaterialIcons name="pause" size={30} color="black" />
+                                <MaterialIcons name="pause" size={30} color="#FFF" />
                                 :
-                                <Entypo name="controller-play" size={30} color="black" />
+                                <Entypo name="controller-play" size={30} color="#FFF" />
                         }
                     </TouchableOpacity>
 
                     <Animated.View
                         onLayout={this.measureTrack}
                         style={{
-                            flex: 8,
+                            width:150,
                             flexDirection: 'row',
                             justifyContent: 'flex-start',
                             alignItems: 'center',
                             height: TRACK_SIZE,
                             borderRadius: TRACK_SIZE / 2,
-                            backgroundColor: 'black',
+                            backgroundColor: '#FFF',
                         }}
                     >
                         <Animated.View
@@ -229,7 +223,7 @@ export default class AudioSlider extends PureComponent {
                                     width: THUMB_SIZE,
                                     height: THUMB_SIZE,
                                     borderRadius: THUMB_SIZE / 2,
-                                    backgroundColor: 'rgba(0,0,0,0.5)',
+                                    backgroundColor: '#FFF',
                                 }}
                             >
                             </View>
@@ -238,14 +232,20 @@ export default class AudioSlider extends PureComponent {
 
                 </View>
 
-                <View style={{
-                        flex: 0,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                    }}>
-                        <DigitalTimeString time={this.state.currentTime} />
-                        <DigitalTimeString time={this.state.duration} />
-                </View>
+                <View
+                style={{
+                    flex: 0,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                }}
+            >
+                { this.state.playing ? (
+                    <DigitalTimeString time={this.state.duration} />
+                ) : (
+                   
+                    <DigitalTimeString time={this.state.currentTime} />
+                )}
+            </View>
             </View>
         );
     };

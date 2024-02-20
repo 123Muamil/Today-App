@@ -24,8 +24,7 @@ export default StyleSheet.create({
   // COMPONENT - CARD ITEM
   containerCardItem: {
     backgroundColor: WHITE,
-    borderRadius: 8,
-    alignItems: "center",
+    borderRadius: 40,
     margin: 10,
     elevation: 1,
     shadowOpacity: 0.05,
@@ -48,12 +47,11 @@ export default StyleSheet.create({
     textAlign: "center",
   },
   status: {
-    paddingBottom: 10,
     flexDirection: "row",
     alignItems: "center",
   },
   statusText: {
-    color: GRAY,
+    color: '#FFF',
     fontSize: 12,
   },
   online: {
@@ -228,7 +226,14 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  title: { paddingBottom: 10, fontSize: 22, color: DARK_GRAY },
+  title: { 
+    paddingBottom: 10,
+    color: '#FFF',
+    fontFamily: '',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '500',
+     },
 
   // CONTAINER - HOME
   containerHome: {
@@ -346,9 +351,9 @@ flexDirection:'row'
   },
   // CONTAINER - MATCHES
   containerMatches: {
-    justifyContent: "space-between",
-    flex: 1,
-    paddingHorizontal: 10,
+    backgroundColor:'#010510',
+    width:DIMENSION_WIDTH,
+    height:DIMENSION_HEIGHT
   },
   flexContainer1:{
     flexDirection:'row',gap:50,marginTop:10
@@ -362,7 +367,19 @@ flexDirection:'row'
     width:DIMENSION_WIDTH,
     height:DIMENSION_HEIGHT
   },
-
+  matchesContainer: {
+    width: 148,
+    padding: 18,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 2,
+    position: 'absolute',
+    left: 12,
+    bottom: 12,
+    borderRadius: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.30)',
+  },
   // CONTAINER - PROFILE
   containerProfile: { marginHorizontal: 0 },
   photo: {

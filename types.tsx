@@ -6,6 +6,7 @@ export type CardItemT = {
   isOnline?: boolean;
   matches?: string;
   name: string;
+  index:number;
 };
 
 export type IconT = {

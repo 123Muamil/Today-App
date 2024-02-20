@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, TextStyle } from 'react-native';
-import styles from './styles';
+import { Text, TextStyle,StyleSheet } from 'react-native';
+
 
 interface DigitalTimeStringProps {
     time: number; // Assuming time is a number
@@ -31,10 +31,20 @@ const DigitalTimeString: React.FC<DigitalTimeStringProps> = ({ time }) => {
     const formattedTime = convertNumberToTime(time);
     
     return (
-        <Text style={styles.StandardText}>
+        <Text style={styles.time}>
             {formattedTime}
         </Text>
     );
 }
-
+const styles = StyleSheet.create({
+    time: {
+      color: '#FFF',
+      fontFamily: 'Geometria',
+      fontSize: 10,
+      fontStyle: 'normal',
+      fontWeight: '400',
+      lineHeight: 10, 
+    },
+  });
+  
 export default DigitalTimeString;
