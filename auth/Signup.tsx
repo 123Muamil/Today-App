@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image ,Dimensions,ImageBackground,SafeAreaView,ScrollView} from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import uuid from 'react-native-uuid';
 import { getDatabase, ref, set } from "firebase/database";
 import app from '../config/firebaseConfig';
 import Toast from 'react-native-simple-toast';
@@ -11,7 +10,6 @@ import { AntDesign } from '@expo/vector-icons';
 const Signup = ({ navigation }:any) => {
     const auth = getAuth();
     const database=getDatabase(app)
-    const userId = uuid.v4();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name,setName]=useState('');
@@ -72,7 +70,7 @@ const Signup = ({ navigation }:any) => {
                             style={styles.input}
                             placeholder="Enter Name"
                             placeholderTextColor="#757A8D"
-                            onChangeText={setEmail}
+                            onChangeText={setName}
                             keyboardType='default'
                         />
                     </View>
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: '#FFF',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 28,
     fontStyle: 'normal',
     fontWeight: '500',
@@ -164,7 +162,7 @@ const styles = StyleSheet.create({
     top: 140,
     color: '#D0D9F9',
     textAlign: 'center',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 20,
     fontStyle: 'normal',
     fontWeight: '500', 
@@ -181,7 +179,7 @@ authContianer:{
 },
 authText: {
   color: '#D0D9F9',
-  fontFamily: 'Geometria',
+  fontFamily: '',
   fontSize: 14,
   fontStyle: 'normal',
   fontWeight: '400',
@@ -226,7 +224,7 @@ forgotContainer:{
 ,
 forgotPasswordText: {
   color: '#FFF',
-  fontFamily: 'Geometria',
+  fontFamily: '',
   fontSize: 14,
   fontStyle: 'normal',
   fontWeight: '500',
@@ -244,7 +242,7 @@ loginButton: {
 },
 buttonText: {
   color: '#FFF',
-  fontFamily: 'Geometria', 
+  fontFamily: '', 
   fontSize: 18,
   fontWeight: '700',
   lineHeight: 24,
@@ -263,7 +261,7 @@ buttonText: {
   },
   orText: {
     color: '#757A8D',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 14,
     fontWeight: '400',
     marginHorizontal: 10,
@@ -290,7 +288,7 @@ buttonText: {
   },
    account: {
     color: '#757A8D',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '400',
@@ -298,7 +296,7 @@ buttonText: {
   },
    register: {
     color: '#FFF',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '500',

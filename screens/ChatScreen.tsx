@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform,PanResponder, Animated,Dimensions,Image} from "react-native";
 import { Icon } from "../components";
-import styles, { DARK_GRAY } from "../assets/styles";
+import styles from "../assets/styles";
 import ChatContainer from "../components/ChatContainer";
 import { RouteProp } from '@react-navigation/native';
 import { useSelector } from "react-redux";
 import { SendMessage, ReceiveMessage } from '../auth/SendMessage';
-import { getDatabase, ref, onValue, off } from 'firebase/database';
+import { getDatabase, ref, onValue } from 'firebase/database';
 import * as ImagePicker from 'expo-image-picker';
 import app from '../config/firebaseConfig';
 import { FontAwesome } from "@expo/vector-icons";
@@ -87,12 +87,9 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
           toValue: { x: 0, y: 0 },
           useNativeDriver: false
         }).start(() => {
-          // Check if the view has returned to its original position
           if (gestureState.dx === 0 && gestureState.dy === 0) {
-            // If it's at the original position, stop recording
             stopRecording();
           } else {
-            // If it's not at the original position, consider it a cancellation
             console.log('Recording canceled');
           }
         });
@@ -320,25 +317,29 @@ const ChatScreen = ({ route }: { route: ChatScreenRouteProp }) => {
           {
               isTyping?<TouchableOpacity style={chatStyles.sendButton} onPress={sendMessage1}>
  <Ionicons name="send"  style={{color:'#FFF'}} size={20} />
-              </TouchableOpacity>:   <Animated.View
-        style={{
-          display: 'flex',
-          padding:20,
-         flexDirection: 'column',
-         justifyContent: 'center',
-         alignItems: 'flex-start',
-         gap: 8,
-         borderRadius: 50,
-         backgroundColor: '#474DEF',
-         marginBottom:40,
-         marginLeft:5,
-          transform: [{ translateX: pan.x }, { translateY: pan.y }]
-        }}
-        {...panResponder.panHandlers}
-      >
-      <FontAwesome name="microphone" style={{color:'#FFF'}} size={20} />
-      </Animated.View>
+              </TouchableOpacity>: <TouchableOpacity style={chatStyles.sendButton} onPressIn={startRecording} onPressOut={stopRecording}>
+              <FontAwesome name="microphone" style={{color:'#FFF'}} size={20} />
+              </TouchableOpacity>
+            //   <Animated.View
+            //   style={{
+            //     display: 'flex',
+            //     padding:20,
+            //    flexDirection: 'column',
+            //    justifyContent: 'center',
+            //    alignItems: 'flex-start',
+            //    gap: 8,
+            //    borderRadius: 50,
+            //    backgroundColor: '#474DEF',
+            //    marginBottom:40,
+            //    marginLeft:5,
+            //     transform: [{ translateX: pan.x }, { translateY: pan.y }]
+            //   }}
+            //   {...panResponder.panHandlers}
+            // >
+            // <FontAwesome name="microphone" style={{color:'#FFF'}} size={20} />
+            // </Animated.View>
           }
+
         </View>
       </View>
     
@@ -384,7 +385,7 @@ const chatStyles = StyleSheet.create({
   },
   lastScene: {
     color: '#D0D9F9',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 12,
     fontStyle: 'normal',
     fontWeight: '400',

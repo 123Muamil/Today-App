@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image ,Dimensions,ImageBackground,SafeAreaView,ScrollView} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { getDatabase, ref, onValue } from "firebase/database";
@@ -9,19 +9,23 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/reducer/user';
 import Auth from '../service/Auth';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import * as WebBrowser from 'expo-web-browser'
+import * as Google from 'expo-auth-session/providers/google'
 const windowWidth = Dimensions.get('window').width;
-const { height } = Dimensions.get('window');
-const halfScreenHeight = height * 0.4;
-const largerhalfScreenHeight = height * 0.6;
-
+WebBrowser.maybeCompleteAuthSession()
 const Login = ({ navigation }:any) => {
     const db = getDatabase(app);
     const auth = getAuth(app);
     const dispatch=useDispatch()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
- 
+    const [accessToken,setAccessToken]=useState(null) as any
+    const [user,set_User]=useState(null)
+    const [request,response,promptAsync]=Google.useIdTokenAuthRequest({
+      clientId:'384466588084-gh674aieta447ap50rat7ec6lg46hpop.apps.googleusercontent.com',
+      iosClientId:'384466588084-q9f2aq8qifaqo11071u71t9k4mobeifn.apps.googleusercontent.com',
+      androidClientId:'384466588084-eu511o3kqmh5cd2ldo0ajmeb0p1gfhh2.apps.googleusercontent.com'
+    })
     const handleLogin = async () => {
       
         await signInWithEmailAndPassword(auth, email, password)
@@ -44,7 +48,29 @@ const Login = ({ navigation }:any) => {
             navigation.navigate('Tab')
         });
     };
-
+const GoogleLogin=async()=>{
+  console.log("Google Login")
+}
+useEffect(() => {
+ if(response?.type==='success')
+ {
+       setAccessToken(response.authentication?.accessToken) 
+       accessToken && fetchUserInfo()
+ }
+}, [response,accessToken])
+const fetchUserInfo=async()=>{
+      let response=await fetch('https://www.googleapis.com/userinfo/v2/me',{
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
+      })
+       const userinfo=response.json() as any
+       console.log("The user info is:",userinfo)
+      if(userinfo)
+      {
+        navigation.navigate('Tab')
+      }
+}
     return (
             <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent} nestedScrollEnabled={true}>
@@ -83,7 +109,7 @@ const Login = ({ navigation }:any) => {
                             />
                             <Image source={require('../assets/hideshow.png')} style={styles.icon}/>
                         </View>
-                        <TouchableOpacity style={styles.forgotContainer} onPress={()=>navigation.navigate('Tab')}>
+                        <TouchableOpacity style={styles.forgotContainer} onPress={()=>navigation.navigate('interests')}>
                             <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
@@ -98,7 +124,9 @@ const Login = ({ navigation }:any) => {
                             <TouchableOpacity style={styles.authButton}>
                                 <AntDesign name="apple1" size={24} color="#FFFFFF" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.authButton}>
+                            <TouchableOpacity style={styles.authButton} onPress={()=>{
+                              promptAsync()
+                            }}>
                                 <AntDesign name="google" size={24} color="#FFFFFF" />
                             </TouchableOpacity>
                         </View>
@@ -139,7 +167,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: '#FFF',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 28,
     fontStyle: 'normal',
     fontWeight: '500',
@@ -150,7 +178,7 @@ const styles = StyleSheet.create({
     top: 140,
     color: '#D0D9F9',
     textAlign: 'center',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 20,
     fontStyle: 'normal',
     fontWeight: '500', 
@@ -168,7 +196,7 @@ authContianer:{
 },
 authText: {
   color: '#D0D9F9',
-  fontFamily: 'Geometria',
+  fontFamily: '',
   fontSize: 14,
   fontStyle: 'normal',
   fontWeight: '400',
@@ -213,7 +241,7 @@ forgotContainer:{
 ,
 forgotPasswordText: {
   color: '#FFF',
-  fontFamily: 'Geometria',
+  fontFamily: '',
   fontSize: 14,
   fontStyle: 'normal',
   fontWeight: '500',
@@ -231,7 +259,7 @@ loginButton: {
 },
 buttonText: {
   color: '#FFF',
-  fontFamily: 'Geometria', 
+  fontFamily: '', 
   fontSize: 18,
   fontWeight: '700',
   lineHeight: 24,
@@ -250,7 +278,7 @@ buttonText: {
   },
   orText: {
     color: '#757A8D',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 14,
     fontWeight: '400',
     marginHorizontal: 10,
@@ -277,7 +305,7 @@ buttonText: {
   },
    account: {
     color: '#757A8D',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '400',
@@ -285,7 +313,7 @@ buttonText: {
   },
    register: {
     color: '#FFF',
-    fontFamily: 'Geometria',
+    fontFamily: '',
     fontSize: 14,
     fontStyle: 'normal',
     fontWeight: '500',

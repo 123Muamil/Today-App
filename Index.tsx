@@ -15,6 +15,9 @@ import Auth from "./service/Auth";
 import { setUser } from "./redux/reducer/user";
 import { StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { BlurView } from 'expo-blur';
+import Interests from "./screens/Interests";
+import Add_Photos from "./screens/Add_Photos";
 const Index = () => {
   const navigationRef = useNavigationContainerRef(); 
   const currentRoute = navigationRef.getCurrentRoute();
@@ -45,14 +48,16 @@ theme.colors.secondaryContainer = "transperent"
         
         >
           {() => (
-            <Tab.Navigator
+             <BlurView intensity={100} tint="light" blurReductionFactor={32} style={{flex:1,}}>
+               <Tab.Navigator
             theme={{colors:{secondaryContainer:'transparent'}}}
               shifting={true}
               activeColor="#474DEF"
               inactiveColor="#FFFFFF"
               sceneAnimationEnabled={false}
               labeled={false}
-              barStyle={{ backgroundColor: '#10172A',
+            
+              barStyle={{ backgroundColor: 'rgba(63, 80, 124, 0.24)',
 
                borderRadius:40,
                 marginHorizontal:5,
@@ -60,6 +65,7 @@ theme.colors.secondaryContainer = "transperent"
                 overflow: 'hidden',
                 justifyContent:'center',
                 alignItems:'center',
+                
                 }}
                 
               screenOptions={({ route }) => ({
@@ -103,13 +109,16 @@ theme.colors.secondaryContainer = "transperent"
               <Tab.Screen name="Chat" component={Messages} />
               <Tab.Screen name="Profile" component={Profile} />
             </Tab.Navigator>
+             </BlurView>
           )}
         </Stack.Screen>
   
       
-        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false,}} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false}}  />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false,}}/>
         <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false,}}/>
+        <Stack.Screen name="interests" component={Interests} options={{ headerShown: false,}}/>
+        <Stack.Screen name="add_photos" component={Add_Photos} options={{ headerShown: false,}}/>
       </Stack.Navigator>
       </NavigationContainer>
     

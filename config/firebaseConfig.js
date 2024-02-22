@@ -23,5 +23,9 @@ const app = initializeApp(firebaseConfig);
 initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
+// Configure Google Sign-In
+//web 384466588084-gh674aieta447ap50rat7ec6lg46hpop.apps.googleusercontent.com
+//ios 384466588084-q9f2aq8qifaqo11071u71t9k4mobeifn.apps.googleusercontent.com
+//android 384466588084-eu511o3kqmh5cd2ldo0ajmeb0p1gfhh2.apps.googleusercontent.com
 
 export default app
