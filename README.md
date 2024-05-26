@@ -15,7 +15,8 @@
 
 ## Overview
 
-⚠️ **This project use code of my previous repository [Tinder - React Native](https://github.com/stevenpersia/tinder-react-native). Because I don't have time to maintain this previous project made on React Native, I've decided to switch to Expo because it's more convenient to me. Sorry if you don't work with Expo (but give it a try).**
+⚠️ **🔥 Today-App: A Tinder-like App for Entrepreneurs and Professionals
+Today-App is a dynamic platform designed for entrepreneurs and professionals to connect, match their interests, and exchange innovative ideas. Built using React Native and powered by Firebase, this app offers a seamless experience for users to discover like-minded individuals and foster collaboration in various fields..**
 
 **Perfect to start an Tinder Clone app.** 4 screens are availables : Explore, Matches, Messages and Profile. You'll find some components like Card Component to pass props and variant. No frameworks UI like Bootstrap or Material UI are used.
 
@@ -27,26 +28,9 @@ This project was inspired by this [amazing Kishore's work on Dribbble](https://d
 
 ## Demo
 
-You can try it here : https://expo.io/@stevenpersia/projects/tinder-expo
+You can try it here : https://123muamil.github.io/LandingPage/
 
-## Screenshots
 
-<img
-width="205"
-alt="Capture 1"
-src="https://github.com/stevenpersia/tinder-expo/blob/master/preview/capture-1.png">
-<img
-width="205"
-alt="Capture 2"
-src="https://github.com/stevenpersia/tinder-expo/blob/master/preview/capture-2.png">
-<img
-width="205"
-alt="Capture 3"
-src="https://github.com/stevenpersia/tinder-expo/blob/master/preview/capture-3.png">
-<img
-width="205"
-alt="Capture 4"
-src="https://github.com/stevenpersia/tinder-expo/blob/master/preview/capture-4.png">
 
 
 ## Installation and usage
@@ -76,45 +60,6 @@ When installation is complete, run it :
 ```
 yarn start
 ```
-
-
-## Props
-
-### CardItem
-
-| Name           | Type     | Required | Description                                               | Example                                             |
-| -------------- | -------- | -------- | --------------------------------------------------------- | --------------------------------------------------- |
-| `image`        | string   | Yes      | Picture of member.                                        | `image="https://..."`                               |
-| `name`         | string   | Yes      | Name of member.                                           | `name="John Doe"`                                   |
-| `description`  | string   | Yes      | Description of member.                                    | `description="Full-time Traveller. Globe Trotter."` |
-| `matches`      | string   | Yes      | Match percentage.                                         | `matches="95"`                                      |
-| `hasActions`   | boolean  | No       | Display actions buttons (Like, Dislike, ...).             | `actions`                                           |
-| `isOnline`     | string   | No       | Display online or offline badge (`Online` and `Offline`). | `status="Online"`                                   |
-| `hasVariant`   | boolean  | No       | Display another style of card (used for Matches screen).  | `variant`                                           |
-
-### Message
-
-| Name          | Type   | Required | Description             | Example                                                                                      |
-| ------------- | ------ | -------- | ----------------------- | -------------------------------------------------------------------------------------------- |
-| `image`       | string | Yes      | Picture of member.      | `image="https://..."`                                                                        |
-| `name`        | string | Yes      | Name of member.         | `name="John Doe"`                                                                            |
-| `lastMessage` | string | Yes      | Last message of member. | `lastMessage="You want order in Gotham. Batman must take off his mask and turn himself in."` |
-
-
-### ProfileItem
-
-| Name       | Type   | Required | Description                 | Example                                    |
-| ---------- | ------ | -------- | --------------------------- | ------------------------------------------ |
-| `name`     | string | Yes      | Name of member.             | `name="John Doe"`                          |
-| `matches`  | string | Yes      | Match percentage.           | `matches="95"`                             |
-| `age`      | string | No       | Age of member.              | `age="25"`                                 |
-| `location` | string | No       | Location of member.         | `location="Paris, France"`                 |
-| `info1`    | string | No       | More information of member. | `info1="Straight, Single"`                 |
-| `info2`    | string | No       | More information of member. | `info2="Tea Totaller & Loves Photography"` |
-| `info3`    | string | No       | More information of member. | `info3="Beaches, Mountain & Coffee"`       |
-| `info4`    | string | No       | More information of member. | `info4="Last seen: 23h ago"`               |
-
-
 ## Star, Fork, Clone & Contribute
 
 Feel free to contribute on this repository. If my work helps you, please give me back with a star. This means a lot to me and keeps me going!
